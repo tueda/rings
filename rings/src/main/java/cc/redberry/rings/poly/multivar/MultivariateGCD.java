@@ -17,6 +17,8 @@ import cc.redberry.rings.poly.univar.*;
 import cc.redberry.rings.primes.PrimesIterator;
 import cc.redberry.rings.primes.SmallPrimes;
 import cc.redberry.rings.util.ArraysUtil;
+import cc.redberry.rings.util.CollectionsUtil;
+
 import com.carrotsearch.hppc.cursors.IntObjectCursor;
 import com.carrotsearch.hppc.IntArrayList;
 import com.carrotsearch.hppc.LongArrayList;
@@ -4106,7 +4108,7 @@ public final class MultivariateGCD {
                         return null;
 
                     assert gcdUnivar.isMonic();
-                    if (!univarSkeleton.keySet().containsAll(gcdUnivar.exponents()))
+                    if (!CollectionsUtil.containsAllKeys(univarSkeleton, gcdUnivar.exponents()))
                         // univariate gcd contains terms that are not present in the skeleton
                         // again unlucky main homomorphism
                         return null;
@@ -4261,7 +4263,7 @@ public final class MultivariateGCD {
                     return null;
 
                 assert gcdUnivar.isMonic();
-                if (!univarSkeleton.keySet().containsAll(gcdUnivar.exponents()))
+                if (!CollectionsUtil.containsAllKeys(univarSkeleton, gcdUnivar.exponents()))
                     // univariate gcd contains terms that are not present in the skeleton
                     // again unlucky main homomorphism
                     return null;
@@ -5279,7 +5281,7 @@ public final class MultivariateGCD {
                         return null;
 
                     assert gcdUnivar.isMonic();
-                    if (!univarSkeleton.keySet().containsAll(gcdUnivar.exponents()))
+                    if (!CollectionsUtil.containsAllKeys(univarSkeleton, gcdUnivar.exponents()))
                         // univariate gcd contains terms that are not present in the skeleton
                         // again unlucky main homomorphism
                         return null;
@@ -5438,7 +5440,7 @@ public final class MultivariateGCD {
                     return null;
 
                 assert gcdUnivar.isMonic();
-                if (!univarSkeleton.keySet().containsAll(gcdUnivar.exponents()))
+                if (!CollectionsUtil.containsAllKeys(univarSkeleton, gcdUnivar.exponents()))
                     // univariate gcd contains terms that are not present in the skeleton
                     // again unlucky main homomorphism
                     return null;

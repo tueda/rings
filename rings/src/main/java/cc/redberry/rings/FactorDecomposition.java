@@ -4,6 +4,7 @@ import cc.redberry.rings.io.IStringifier;
 import cc.redberry.rings.io.Stringifiable;
 import cc.redberry.rings.poly.MachineArithmetic;
 import cc.redberry.rings.util.ArraysUtil;
+import cc.redberry.rings.util.CollectionsUtil;
 import com.carrotsearch.hppc.IntArrayList;
 import com.carrotsearch.hppc.ObjectIntHashMap;
 import com.carrotsearch.hppc.procedures.ObjectIntProcedure;
@@ -75,7 +76,7 @@ public class FactorDecomposition<E>
 
     /** Sum all exponents */
     public int sumExponents() {
-        return exponents.sum();
+        return CollectionsUtil.sum(exponents);
     }
 
     /** Multiply each exponent by a given factor */

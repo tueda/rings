@@ -16,6 +16,7 @@ import cc.redberry.rings.poly.univar.UnivariatePolynomial;
 import cc.redberry.rings.poly.univar.UnivariatePolynomialArithmetic;
 import cc.redberry.rings.primes.PrimesIterator;
 import cc.redberry.rings.util.ArraysUtil;
+import cc.redberry.rings.util.CollectionsUtil;
 import cc.redberry.rings.util.ListWrapper;
 import com.carrotsearch.hppc.IntArrayList;
 import com.carrotsearch.hppc.LongArrayList;
@@ -4152,7 +4153,7 @@ public final class GroebnerBases {
             assert Arrays.stream(this.usedVars).allMatch(i -> i >= 0);
             assert isSorted(this.usedVars);
             this.reducedEquation = equation.dropSelectVariables(this.usedVars);
-            this.mapping = new IntIntHashMap(Constants.DEFAULT_CAPACITY, Constants.DEFAULT_LOAD_FACTOR, -1, -1);
+            this.mapping = new IntIntHashMap();
             for (int i = 0; i < this.usedVars.length; ++i)
                 mapping.put(this.usedVars[i], i);
             this.isLinear = isLinear(equation);
@@ -4337,7 +4338,7 @@ public final class GroebnerBases {
                 if (!eq.hasVariable(var))
                     continue;
 
-                int rVar = eq.mapping.get(var);
+                int rVar = eq.mapping.getOrDefault(var, -1);
                 assert rVar >= 0;
                 eliminated.add(var);
                 rEliminated.add(rVar);
@@ -4346,8 +4347,8 @@ public final class GroebnerBases {
             if (eliminated.isEmpty())
                 return eq;
 
-            eliminated.sort();
             int[] eliminatedArray = eliminated.toArray();
+            Arrays.sort(eliminatedArray);
             int[] usedVars = ArraysUtil.intSetDifference(eq.usedVars, eliminatedArray);
             IntIntHashMap mapping = new IntIntHashMap();
             for (int i = 0; i < usedVars.length; ++i)
@@ -4389,7 +4390,7 @@ public final class GroebnerBases {
                     Equation<Monomial<E>, MultivariatePolynomial<E>> jEq = equations.get(j);
                     if (jEq.usedVars.length > baseVars.size())
                         break;
-                    if (baseVars.containsAll(jEq.usedVars))
+                    if (CollectionsUtil.containsAll(baseVars, jEq.usedVars))
                         block.add(jEq);
                 }
 

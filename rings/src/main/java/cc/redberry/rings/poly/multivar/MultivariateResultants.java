@@ -13,6 +13,8 @@ import cc.redberry.rings.poly.UnivariateRing;
 import cc.redberry.rings.poly.univar.*;
 import cc.redberry.rings.primes.PrimesIterator;
 import cc.redberry.rings.util.ArraysUtil;
+import cc.redberry.rings.util.CollectionsUtil;
+
 import com.carrotsearch.hppc.cursors.IntObjectCursor;
 import com.carrotsearch.hppc.IntObjectHashMap;
 import com.carrotsearch.hppc.LongHashSet;
@@ -1591,7 +1593,7 @@ public final class MultivariateResultants {
 
                 UnivariatePolynomialZp64 resUnivar = UnivariateResultants.Resultant(aBivar, bBivar);
 
-                if (!univarSkeleton.keySet().containsAll(resUnivar.exponents()))
+                if (!CollectionsUtil.containsAllKeys(univarSkeleton, resUnivar.exponents()))
                     // univariate resultant contains terms that are not present in the skeleton
                     // again unlucky main homomorphism
                     return null;
@@ -1834,7 +1836,7 @@ public final class MultivariateResultants {
 
                 UnivariatePolynomial<E> resUnivar = UnivariateResultants.Resultant(aBivar, bBivar);
 
-                if (!univarSkeleton.keySet().containsAll(resUnivar.exponents()))
+                if (!CollectionsUtil.containsAllKeys(univarSkeleton, resUnivar.exponents()))
                     // univariate resultant contains terms that are not present in the skeleton
                     // again unlucky main homomorphism
                     return null;
