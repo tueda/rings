@@ -17,12 +17,12 @@ import cc.redberry.rings.poly.univar.*;
 import cc.redberry.rings.primes.PrimesIterator;
 import cc.redberry.rings.primes.SmallPrimes;
 import cc.redberry.rings.util.ArraysUtil;
-import gnu.trove.iterator.TIntObjectIterator;
-import gnu.trove.list.array.TIntArrayList;
-import gnu.trove.list.array.TLongArrayList;
-import gnu.trove.map.hash.TIntObjectHashMap;
-import gnu.trove.set.hash.TIntHashSet;
-import gnu.trove.set.hash.TLongHashSet;
+import com.carrotsearch.hppc.cursors.IntObjectCursor;
+import com.carrotsearch.hppc.IntArrayList;
+import com.carrotsearch.hppc.LongArrayList;
+import com.carrotsearch.hppc.IntObjectHashMap;
+import com.carrotsearch.hppc.IntHashSet;
+import com.carrotsearch.hppc.LongHashSet;
 import org.apache.commons.math3.random.RandomGenerator;
 
 import java.util.*;
@@ -866,13 +866,13 @@ public final class MultivariateGCD {
     // get rid of unused variables
     private static <Term extends AMonomial<Term>, Poly extends AMultivariatePolynomial<Term, Poly>>
     Poly[] getRidOfUnusedVariables(Poly poly, int[] degreeBounds) {
-        TIntArrayList
+        IntArrayList
                 // variables that absent in poly, i.e.
                 // may be dropped with dropVariables (very fast)
-                drop = new TIntArrayList(),
+                drop = new IntArrayList(),
                 // variables that present in poly, but don't
                 // present in GCD numerated as after invocation of dropVariables
-                unused = new TIntArrayList();
+                unused = new IntArrayList();
         for (int i = 0; i < poly.nVariables; ++i) {
             if (poly.degree(i) == 0)
                 drop.add(i);
@@ -931,7 +931,7 @@ public final class MultivariateGCD {
             // in case of small cardinality we have to do clever
             int cardinality = a.coefficientRingCardinality().intValue();
             for (int i = 0; i < nVariables; i++) {
-                TLongHashSet seen = new TLongHashSet();
+                LongHashSet seen = new LongHashSet();
                 do {
                     if (seen.size() == cardinality)
                         return; // nothing can be done
@@ -3689,7 +3689,7 @@ public final class MultivariateGCD {
 
         boolean monic = a.coefficientOf(0, a.degree(0)).isConstant() && b.coefficientOf(0, a.degree(0)).isConstant();
         Set<DegreeVector> globalSkeleton = skeleton.getSkeleton();
-        TIntObjectHashMap<MultivariatePolynomial<E>> univarSkeleton = getSkeleton(skeleton);
+        IntObjectHashMap<MultivariatePolynomial<E>> univarSkeleton = getSkeleton(skeleton);
         int[] sparseUnivarDegrees = univarSkeleton.keys();
 
         Ring<E> ring = a.ring;
@@ -3761,8 +3761,8 @@ public final class MultivariateGCD {
      * view multivariate polynomial as a univariate in Zp[x_1, ... x_N][x_0] and return the map (x_0)^exponent ->
      * coefficient in Zp[x_1, ... x_N]
      */
-    static <E> TIntObjectHashMap<MultivariatePolynomial<E>> getSkeleton(MultivariatePolynomial<E> poly) {
-        TIntObjectHashMap<MultivariatePolynomial<E>> skeleton = new TIntObjectHashMap<>();
+    static <E> IntObjectHashMap<MultivariatePolynomial<E>> getSkeleton(MultivariatePolynomial<E> poly) {
+        IntObjectHashMap<MultivariatePolynomial<E>> skeleton = new IntObjectHashMap<>();
         for (Monomial<E> term : poly) {
             Monomial<E> newDV = term.setZero(0);
             MultivariatePolynomial<E> coeff = skeleton.get(term.exponents[0]);
@@ -3820,7 +3820,7 @@ public final class MultivariateGCD {
         /** global skeleton of the result */
         final Set<DegreeVector> globalSkeleton;
         /** skeleton of each of the coefficients of polynomial viewed as Zp[x_1,...,x_N][x_0] */
-        final TIntObjectHashMap<MultivariatePolynomial<E>> univarSkeleton;
+        final IntObjectHashMap<MultivariatePolynomial<E>> univarSkeleton;
         /** univariate degrees of {@code univarSkeleton} with respect to x_0 */
         final int[] sparseUnivarDegrees;
         /**
@@ -3844,7 +3844,7 @@ public final class MultivariateGCD {
         ASparseInterpolation(Ring<E> ring, int variable,
                              MultivariatePolynomial<E> a, MultivariatePolynomial<E> b,
                              Set<DegreeVector> globalSkeleton,
-                             TIntObjectHashMap<MultivariatePolynomial<E>> univarSkeleton,
+                             IntObjectHashMap<MultivariatePolynomial<E>> univarSkeleton,
                              int[] sparseUnivarDegrees, int[] evaluationVariables,
                              E[] evaluationPoint,
                              MultivariatePolynomial.PrecomputedPowersHolder<E> powers, int expectedNumberOfEvaluations, RandomGenerator rnd) {
@@ -3924,8 +3924,8 @@ public final class MultivariateGCD {
         /** base powers (raiseFactor == 1) */
         private final MultivariatePolynomial.PrecomputedPowersHolder<E> basePowers;
         /** cache */
-        private final TIntObjectHashMap<MultivariatePolynomial.PrecomputedPowersHolder<E>> powersCache
-                = new TIntObjectHashMap<>();
+        private final IntObjectHashMap<MultivariatePolynomial.PrecomputedPowersHolder<E>> powersCache
+                = new IntObjectHashMap<>();
 
         PlainEvaluations(MultivariatePolynomial<E> poly,
                          int[] evaluationVariables,
@@ -3981,8 +3981,8 @@ public final class MultivariateGCD {
         }
 
         /** cache of bivariate polynomials for different raise factors */
-        private final TIntObjectHashMap<MultivariatePolynomial<MultivariatePolynomial<E>>> bivariateCache
-                = new TIntObjectHashMap<>();
+        private final IntObjectHashMap<MultivariatePolynomial<MultivariatePolynomial<E>>> bivariateCache
+                = new IntObjectHashMap<>();
 
         /**
          * returns a sparse recursive form of initial poly with all but first and last variables evaluated with given
@@ -4048,7 +4048,7 @@ public final class MultivariateGCD {
 
     static final class LinZipInterpolation<E> extends ASparseInterpolation<E> {
         LinZipInterpolation(Ring<E> ring, int variable, MultivariatePolynomial<E> a, MultivariatePolynomial<E> b,
-                            Set<DegreeVector> globalSkeleton, TIntObjectHashMap<MultivariatePolynomial<E>> univarSkeleton,
+                            Set<DegreeVector> globalSkeleton, IntObjectHashMap<MultivariatePolynomial<E>> univarSkeleton,
                             int[] sparseUnivarDegrees, int[] evaluationVariables, E[] evaluationPoint,
                             MultivariatePolynomial.PrecomputedPowersHolder<E> powers, int expectedNumberOfEvaluations,
                             RandomGenerator rnd) {
@@ -4226,7 +4226,7 @@ public final class MultivariateGCD {
         final int monicScalingExponent;
 
         MonicInterpolation(Ring<E> ring, int variable, MultivariatePolynomial<E> a, MultivariatePolynomial<E> b,
-                           Set<DegreeVector> globalSkeleton, TIntObjectHashMap<MultivariatePolynomial<E>> univarSkeleton,
+                           Set<DegreeVector> globalSkeleton, IntObjectHashMap<MultivariatePolynomial<E>> univarSkeleton,
                            int[] sparseUnivarDegrees, int[] evaluationVariables, E[] evaluationPoint,
                            MultivariatePolynomial.PrecomputedPowersHolder<E> powers, int expectedNumberOfEvaluations,
                            RandomGenerator rnd, int requiredNumberOfEvaluations, int monicScalingExponent) {
@@ -4545,7 +4545,7 @@ public final class MultivariateGCD {
         //previous interpolation (used to detect whether update doesn't change the result)
         MultivariatePolynomialZp64 previousInterpolation;
         //store points that were already used in interpolation
-        TLongHashSet evaluationStack = new TLongHashSet();
+        LongHashSet evaluationStack = new LongHashSet();
 
         int[] aDegrees = a.degrees(), bDegrees = b.degrees();
         main:
@@ -4760,7 +4760,7 @@ public final class MultivariateGCD {
 
         IntegersZp64 ring = factory.ring;
         //store points that were already used in interpolation
-        TLongHashSet globalEvaluationStack = new TLongHashSet();
+        LongHashSet globalEvaluationStack = new LongHashSet();
 
         int[] aDegrees = a.degreesRef(), bDegrees = b.degreesRef();
         int failedSparseInterpolations = 0;
@@ -4821,7 +4821,7 @@ public final class MultivariateGCD {
             //previous interpolation (used to detect whether update doesn't change the result)
             MultivariatePolynomialZp64 previousInterpolation;
             //local evaluation stack for points that are calculated via sparse interpolation (but not gcd evaluation) -> always same skeleton
-            TLongHashSet localEvaluationStack = new TLongHashSet(globalEvaluationStack);
+            LongHashSet localEvaluationStack = new LongHashSet(globalEvaluationStack);
             while (true) {
                 if (evaluationStackLimit == localEvaluationStack.size())
                     return null;
@@ -4883,7 +4883,7 @@ public final class MultivariateGCD {
         boolean monic = a.coefficientOf(0, a.degree(0)).isConstant() && b.coefficientOf(0, a.degree(0)).isConstant();
 
         Set<DegreeVector> globalSkeleton = skeleton.getSkeleton();
-        TIntObjectHashMap<MultivariatePolynomialZp64> univarSkeleton = getSkeleton(skeleton);
+        IntObjectHashMap<MultivariatePolynomialZp64> univarSkeleton = getSkeleton(skeleton);
         int[] sparseUnivarDegrees = univarSkeleton.keys();
 
         IntegersZp64 ring = a.ring;
@@ -4953,8 +4953,8 @@ public final class MultivariateGCD {
      * view multivariate polynomial as a univariate in Zp[x_1, ... x_N][x_0] and return the map (x_0)^exponent ->
      * coefficient in Zp[x_1, ... x_N]
      */
-    static TIntObjectHashMap<MultivariatePolynomialZp64> getSkeleton(MultivariatePolynomialZp64 poly) {
-        TIntObjectHashMap<MultivariatePolynomialZp64> skeleton = new TIntObjectHashMap<>();
+    static IntObjectHashMap<MultivariatePolynomialZp64> getSkeleton(MultivariatePolynomialZp64 poly) {
+        IntObjectHashMap<MultivariatePolynomialZp64> skeleton = new IntObjectHashMap<>();
         for (MonomialZp64 term : poly) {
             MonomialZp64 newDV = term.setZero(0);
             MultivariatePolynomialZp64 coeff = skeleton.get(term.exponents[0]);
@@ -5011,7 +5011,7 @@ public final class MultivariateGCD {
         /** global skeleton of the result */
         final Set<DegreeVector> globalSkeleton;
         /** skeleton of each of the coefficients of polynomial viewed as Zp[x_1,...,x_N][x_0] */
-        final TIntObjectHashMap<MultivariatePolynomialZp64> univarSkeleton;
+        final IntObjectHashMap<MultivariatePolynomialZp64> univarSkeleton;
         /** univariate degrees of {@code univarSkeleton} with respect to x_0 */
         final int[] sparseUnivarDegrees;
         /**
@@ -5035,7 +5035,7 @@ public final class MultivariateGCD {
         lASparseInterpolation(IntegersZp64 ring, int variable,
                               MultivariatePolynomialZp64 a, MultivariatePolynomialZp64 b,
                               Set<DegreeVector> globalSkeleton,
-                              TIntObjectHashMap<MultivariatePolynomialZp64> univarSkeleton,
+                              IntObjectHashMap<MultivariatePolynomialZp64> univarSkeleton,
                               int[] sparseUnivarDegrees, int[] evaluationVariables,
                               long[] evaluationPoint,
                               MultivariatePolynomialZp64.lPrecomputedPowersHolder powers,
@@ -5106,8 +5106,8 @@ public final class MultivariateGCD {
         /** base powers (raiseFactor == 1) */
         private final MultivariatePolynomialZp64.lPrecomputedPowersHolder basePowers;
         /** cache */
-        private final TIntObjectHashMap<MultivariatePolynomialZp64.lPrecomputedPowersHolder> powersCache
-                = new TIntObjectHashMap<>();
+        private final IntObjectHashMap<MultivariatePolynomialZp64.lPrecomputedPowersHolder> powersCache
+                = new IntObjectHashMap<>();
 
         PlainEvaluationsZp64(MultivariatePolynomialZp64 poly,
                              int[] evaluationVariables,
@@ -5164,8 +5164,8 @@ public final class MultivariateGCD {
         }
 
         /** cache of bivariate polynomials for different raise factors */
-        private final TIntObjectHashMap<MultivariatePolynomial<MultivariatePolynomialZp64>> bivariateCache
-                = new TIntObjectHashMap<>();
+        private final IntObjectHashMap<MultivariatePolynomial<MultivariatePolynomialZp64>> bivariateCache
+                = new IntObjectHashMap<>();
 
         /**
          * returns a sparse recursive form of initial poly with all but first and last variables evaluated with given
@@ -5225,7 +5225,7 @@ public final class MultivariateGCD {
     static final class lLinZipInterpolation extends lASparseInterpolation {
         lLinZipInterpolation(IntegersZp64 ring, int variable, MultivariatePolynomialZp64 a,
                              MultivariatePolynomialZp64 b, Set<DegreeVector> globalSkeleton,
-                             TIntObjectHashMap<MultivariatePolynomialZp64> univarSkeleton, int[] sparseUnivarDegrees,
+                             IntObjectHashMap<MultivariatePolynomialZp64> univarSkeleton, int[] sparseUnivarDegrees,
                              int[] evaluationVariables, long[] evaluationPoint, MultivariatePolynomialZp64.lPrecomputedPowersHolder powers,
                              int expectedNumberOfEvaluations, RandomGenerator rnd) {
             super(ring, variable, a, b, globalSkeleton, univarSkeleton, sparseUnivarDegrees, evaluationVariables, evaluationPoint, powers, expectedNumberOfEvaluations, rnd);
@@ -5367,7 +5367,7 @@ public final class MultivariateGCD {
         int nUnknownsMonomials = unknowns.size();
         int nUnknownsTotal = nUnknownsMonomials + nUnknownScalings;
         ArrayList<long[]> lhsGlobal = new ArrayList<>();
-        TLongArrayList rhsGlobal = new TLongArrayList();
+        LongArrayList rhsGlobal = new LongArrayList();
         int offset = 0;
         IntegersZp64 ring = factory.ring;
         for (lLinZipSystem system : subSystems) {
@@ -5405,7 +5405,7 @@ public final class MultivariateGCD {
         final int monicScalingExponent;
 
         lMonicInterpolation(IntegersZp64 ring, int variable, MultivariatePolynomialZp64 a, MultivariatePolynomialZp64 b,
-                            Set<DegreeVector> globalSkeleton, TIntObjectHashMap<MultivariatePolynomialZp64> univarSkeleton,
+                            Set<DegreeVector> globalSkeleton, IntObjectHashMap<MultivariatePolynomialZp64> univarSkeleton,
                             int[] sparseUnivarDegrees, int[] evaluationVariables, long[] evaluationPoint,
                             MultivariatePolynomialZp64.lPrecomputedPowersHolder powers, int expectedNumberOfEvaluations, RandomGenerator rnd, int requiredNumberOfEvaluations,
                             int monicScalingExponent) {
@@ -5504,7 +5504,7 @@ public final class MultivariateGCD {
         /** the lhs matrix */
         final ArrayList<long[]> matrix;
         /** the rhs values */
-        final TLongArrayList rhs = new TLongArrayList();
+        final LongArrayList rhs = new LongArrayList();
         /** precomputed powers */
         final MultivariatePolynomialZp64.lPrecomputedPowersHolder powers;
         /** number of non-fixed variables, i.e. variables that will be substituted */
@@ -5541,7 +5541,7 @@ public final class MultivariateGCD {
             super(univarDegree, skeleton, powers, nVars);
         }
 
-        private final TLongArrayList scalingMatrix = new TLongArrayList();
+        private final LongArrayList scalingMatrix = new LongArrayList();
 
         public void oneMoreEquation(long rhsVal, boolean newScalingIntroduced) {
             long[] row = new long[skeleton.length];
@@ -5930,7 +5930,7 @@ public final class MultivariateGCD {
         // actual number of variables in use [0, ... nVariables] (may be less than a.nVariables)
         final int nVariables;
         // variables in which both cc and lc in a and b are non zeroes
-        final TIntArrayList perfectVariables = new TIntArrayList();
+        final IntArrayList perfectVariables = new IntArrayList();
 
         EZGCDEvaluations(MultivariatePolynomialZp64 a,
                          MultivariatePolynomialZp64 b,
@@ -5974,7 +5974,7 @@ public final class MultivariateGCD {
         // number of tries keeping as many zero variables as possible
         int nAttemptsWithZeros = 0;
         // variable that were used as main variables
-        final TIntHashSet usedBaseVariables = new TIntHashSet();
+        final IntHashSet usedBaseVariables = new IntHashSet();
         int nAttemptsWithSameBaseVariable = 0;
 
         // returns whether the main variable was changed

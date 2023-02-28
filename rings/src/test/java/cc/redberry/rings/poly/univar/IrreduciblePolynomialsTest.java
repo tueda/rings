@@ -5,8 +5,8 @@ import cc.redberry.rings.bigint.BigInteger;
 import cc.redberry.rings.poly.PolynomialFactorDecomposition;
 import cc.redberry.rings.primes.SmallPrimes;
 import cc.redberry.rings.util.RandomDataGenerator;
-import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
+import com.carrotsearch.hppc.IntObjectMap;
+import com.carrotsearch.hppc.IntObjectHashMap;
 import org.apache.commons.math3.random.RandomGenerator;
 import org.junit.Assert;
 import org.junit.Test;
@@ -60,7 +60,7 @@ public class IrreduciblePolynomialsTest extends AUnivariateTest {
 
         UnivariateDivision.InverseModMonomial<UnivariatePolynomialZp64> invMod = UnivariateDivision.fastDivisionPreConditioning(poly);
         UnivariatePolynomialZp64 xq = createMonomialMod(poly.modulus(), poly, invMod);
-        TIntObjectMap<UnivariatePolynomialZp64> cache = new TIntObjectHashMap<>();
+        IntObjectMap<UnivariatePolynomialZp64> cache = new IntObjectHashMap<>();
 
         UnivariatePolynomialZp64 actual = IrreduciblePolynomials.composition(xq.clone(), exponent, poly, invMod, cache);
         UnivariatePolynomialZp64 expected = composition(xq.clone(), exponent, poly, invMod);
@@ -117,7 +117,7 @@ public class IrreduciblePolynomialsTest extends AUnivariateTest {
 
             UnivariateDivision.InverseModMonomial<UnivariatePolynomialZp64> invMod = UnivariateDivision.fastDivisionPreConditioning(poly);
             UnivariatePolynomialZp64 xq = createMonomialMod(poly.modulus(), poly, invMod);
-            TIntObjectMap<UnivariatePolynomialZp64> cache = new TIntObjectHashMap<>();
+            IntObjectMap<UnivariatePolynomialZp64> cache = new IntObjectHashMap<>();
 
             int exponent = rndd.nextInt(1, 1024);
             UnivariatePolynomialZp64 actual = IrreduciblePolynomials.composition(xq.clone(), exponent, poly, invMod, cache);

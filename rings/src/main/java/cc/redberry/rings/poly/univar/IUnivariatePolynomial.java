@@ -5,7 +5,7 @@ import cc.redberry.rings.poly.IPolynomial;
 import cc.redberry.rings.poly.multivar.AMultivariatePolynomial;
 import cc.redberry.rings.poly.multivar.DegreeVector;
 import cc.redberry.rings.poly.multivar.MonomialOrder;
-import gnu.trove.set.hash.TIntHashSet;
+import com.carrotsearch.hppc.IntHashSet;
 
 import java.util.Comparator;
 import java.util.function.Function;
@@ -82,8 +82,8 @@ public interface IUnivariatePolynomial<Poly extends IUnivariatePolynomial<Poly>>
      *
      * @return a set of exponents of non-zero terms
      */
-    default TIntHashSet exponents() {
-        TIntHashSet degrees = new TIntHashSet();
+    default IntHashSet exponents() {
+        IntHashSet degrees = new IntHashSet();
         for (int i = degree(); i >= 0; --i)
             if (!isZeroAt(i))
                 degrees.add(i);

@@ -7,8 +7,8 @@ import cc.redberry.rings.bigint.BigIntegerUtil;
 import cc.redberry.rings.poly.Util;
 import cc.redberry.rings.primes.SmallPrimes;
 import cc.redberry.rings.util.ArraysUtil;
-import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
+import com.carrotsearch.hppc.IntObjectMap;
+import com.carrotsearch.hppc.IntObjectHashMap;
 import org.apache.commons.math3.random.RandomGenerator;
 
 import static cc.redberry.rings.poly.univar.Conversions64bit.asOverZp64;
@@ -70,7 +70,7 @@ public final class IrreduciblePolynomials {
         Poly xq = UnivariatePolynomialArithmetic.createMonomialMod(poly.coefficientRingCardinality(), poly, invMod);
 
         // cached powers x^(q^i) for different i
-        TIntObjectMap<Poly> cache = new TIntObjectHashMap<>();
+        IntObjectMap<Poly> cache = new IntObjectHashMap<>();
 
         int degree = poly.degree();
 
@@ -100,7 +100,7 @@ public final class IrreduciblePolynomials {
     static <Poly extends IUnivariatePolynomial<Poly>> Poly composition(
             Poly xq, int exponent,
             Poly poly, UnivariateDivision.InverseModMonomial<Poly> invMod,
-            TIntObjectMap<Poly> cache) {
+            IntObjectMap<Poly> cache) {
         assert exponent > 0;
 
         Poly cached = cache.get(exponent);

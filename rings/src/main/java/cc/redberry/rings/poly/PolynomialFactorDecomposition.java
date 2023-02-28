@@ -2,8 +2,8 @@ package cc.redberry.rings.poly;
 
 import cc.redberry.rings.FactorDecomposition;
 import cc.redberry.rings.util.ArraysUtil;
-import gnu.trove.list.array.TIntArrayList;
-import gnu.trove.map.hash.TObjectIntHashMap;
+import com.carrotsearch.hppc.IntArrayList;
+import com.carrotsearch.hppc.ObjectIntHashMap;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,7 +25,7 @@ public final class PolynomialFactorDecomposition<Poly extends IPolynomial<Poly>>
         extends FactorDecomposition<Poly> implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
 
-    private PolynomialFactorDecomposition(Poly unit, List<Poly> factors, TIntArrayList exponents) {
+    private PolynomialFactorDecomposition(Poly unit, List<Poly> factors, IntArrayList exponents) {
         super(PolynomialRing(unit), unit, factors, exponents);
     }
 
@@ -168,7 +168,7 @@ public final class PolynomialFactorDecomposition<Poly extends IPolynomial<Poly>>
 
     @Override
     public PolynomialFactorDecomposition<Poly> clone() {
-        return new PolynomialFactorDecomposition<>(unit.clone(), factors.stream().map(Poly::clone).collect(Collectors.toList()), new TIntArrayList(exponents));
+        return new PolynomialFactorDecomposition<>(unit.clone(), factors.stream().map(Poly::clone).collect(Collectors.toList()), new IntArrayList(exponents));
     }
 
     /** Unit factorization */
@@ -180,7 +180,7 @@ public final class PolynomialFactorDecomposition<Poly extends IPolynomial<Poly>>
 
     /** Empty factorization */
     public static <Poly extends IPolynomial<Poly>> PolynomialFactorDecomposition<Poly> empty(Poly factory) {
-        return new PolynomialFactorDecomposition<>(factory.createOne(), new ArrayList<>(), new TIntArrayList());
+        return new PolynomialFactorDecomposition<>(factory.createOne(), new ArrayList<>(), new IntArrayList());
     }
 
     /**
@@ -191,7 +191,7 @@ public final class PolynomialFactorDecomposition<Poly extends IPolynomial<Poly>>
      * @param exponents the exponents
      */
     public static <Poly extends IPolynomial<Poly>> PolynomialFactorDecomposition<Poly>
-    of(Poly unit, List<Poly> factors, TIntArrayList exponents) {
+    of(Poly unit, List<Poly> factors, IntArrayList exponents) {
         if (factors.size() != exponents.size())
             throw new IllegalArgumentException();
         PolynomialFactorDecomposition<Poly> r = empty(unit).addUnit(unit);
@@ -235,11 +235,11 @@ public final class PolynomialFactorDecomposition<Poly extends IPolynomial<Poly>>
      * @param factors factors
      */
     public static <Poly extends IPolynomial<Poly>> PolynomialFactorDecomposition<Poly> of(Collection<Poly> factors) {
-        TObjectIntHashMap<Poly> map = new TObjectIntHashMap<>();
+        ObjectIntHashMap<Poly> map = new ObjectIntHashMap<>();
         for (Poly e : factors)
             map.adjustOrPutValue(e, 1, 1);
         List<Poly> l = new ArrayList<>();
-        TIntArrayList e = new TIntArrayList();
+        IntArrayList e = new IntArrayList();
         map.forEachEntry((a, b) -> {
             l.add(a);
             e.add(b);

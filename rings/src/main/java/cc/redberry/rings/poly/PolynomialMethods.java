@@ -3,7 +3,7 @@ package cc.redberry.rings.poly;
 import cc.redberry.rings.bigint.BigInteger;
 import cc.redberry.rings.poly.multivar.*;
 import cc.redberry.rings.poly.univar.*;
-import gnu.trove.map.hash.TIntObjectHashMap;
+import com.carrotsearch.hppc.IntObjectHashMap;
 
 import java.util.stream.StreamSupport;
 
@@ -317,7 +317,7 @@ public final class PolynomialMethods {
      * @return {@code base} in a power of {@code e}
      */
     public static <T extends IPolynomial<T>> T polyPow(final T base, int exponent, boolean copy,
-                                                       TIntObjectHashMap<T> cache) {
+                                                       IntObjectHashMap<T> cache) {
         if (exponent < 0)
             throw new IllegalArgumentException();
         if (exponent == 1)

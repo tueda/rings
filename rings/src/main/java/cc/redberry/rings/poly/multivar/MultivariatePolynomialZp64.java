@@ -16,10 +16,10 @@ import cc.redberry.rings.poly.univar.UnivariatePolynomial;
 import cc.redberry.rings.poly.univar.UnivariatePolynomialZ64;
 import cc.redberry.rings.poly.univar.UnivariatePolynomialZp64;
 import cc.redberry.rings.util.ArraysUtil;
-import gnu.trove.iterator.TLongObjectIterator;
-import gnu.trove.list.array.TIntArrayList;
-import gnu.trove.map.hash.TIntObjectHashMap;
-import gnu.trove.map.hash.TLongObjectHashMap;
+import com.carrotsearch.hppc.cursors.LongObjectCursor;
+import com.carrotsearch.hppc.IntArrayList;
+import com.carrotsearch.hppc.IntObjectHashMap;
+import com.carrotsearch.hppc.LongObjectHashMap;
 import org.apache.commons.math3.random.RandomGenerator;
 
 import java.util.*;
@@ -980,7 +980,7 @@ public final class MultivariatePolynomialZp64 extends AMultivariatePolynomial<Mo
         // compute number of variables
         int nVariables = 1;
         AMultivariatePolynomial p = recForm;
-        TIntArrayList degrees = new TIntArrayList();
+        IntArrayList degrees = new IntArrayList();
         while (p instanceof MultivariatePolynomial) {
             p = (AMultivariatePolynomial) ((MultivariatePolynomial) p).cc();
             degrees.add(p.degree());
@@ -1465,8 +1465,8 @@ public final class MultivariatePolynomialZp64 extends AMultivariatePolynomial<Mo
         final int nVariables;
         final Comparator<DegreeVector> ordering;
         final UnivariatePolynomialZp64 base;
-        final TIntObjectHashMap<UnivariatePolynomialZp64> uCache = new TIntObjectHashMap<>();
-        final TIntObjectHashMap<MultivariatePolynomialZp64> mCache = new TIntObjectHashMap<>();
+        final IntObjectHashMap<UnivariatePolynomialZp64> uCache = new IntObjectHashMap<>();
+        final IntObjectHashMap<MultivariatePolynomialZp64> mCache = new IntObjectHashMap<>();
 
         lUSubstitution(UnivariatePolynomialZp64 base, int variable, int nVariables, Comparator<DegreeVector> ordering) {
             this.nVariables = nVariables;
@@ -1488,7 +1488,7 @@ public final class MultivariatePolynomialZp64 extends AMultivariatePolynomial<Mo
 
     static final class lMSubstitution implements lPrecomputedSubstitution {
         final MultivariatePolynomialZp64 base;
-        final TIntObjectHashMap<MultivariatePolynomialZp64> cache = new TIntObjectHashMap<>();
+        final IntObjectHashMap<MultivariatePolynomialZp64> cache = new IntObjectHashMap<>();
 
         lMSubstitution(MultivariatePolynomialZp64 base) {
             this.base = base;
@@ -1659,10 +1659,10 @@ public final class MultivariatePolynomialZp64 extends AMultivariatePolynomial<Mo
         return result;
     }
 
-    private static TLongObjectHashMap<CfHolder> multiplySparseUnivariate(IntegersZp64 ring,
+    private static LongObjectHashMap<CfHolder> multiplySparseUnivariate(IntegersZp64 ring,
                                                                          long[][] a,
                                                                          long[][] b) {
-        TLongObjectHashMap<CfHolder> result = new TLongObjectHashMap<>(a.length + b.length);
+        LongObjectHashMap<CfHolder> result = new LongObjectHashMap<>(a.length + b.length);
         for (long[] ai : a) {
             for (long[] bi : b) {
                 long deg = ai[0] + bi[0];
@@ -1678,7 +1678,7 @@ public final class MultivariatePolynomialZp64 extends AMultivariatePolynomial<Mo
         return result;
     }
 
-    private MultivariatePolynomialZp64 fromKronecker(TLongObjectHashMap<CfHolder> p,
+    private MultivariatePolynomialZp64 fromKronecker(LongObjectHashMap<CfHolder> p,
                                                      long[] kroneckerMap) {
         terms.clear();
         TLongObjectIterator<CfHolder> it = p.iterator();

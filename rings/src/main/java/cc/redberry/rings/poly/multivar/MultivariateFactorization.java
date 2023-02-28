@@ -9,8 +9,8 @@ import cc.redberry.rings.poly.Util.Tuple2;
 import cc.redberry.rings.poly.univar.*;
 import cc.redberry.rings.primes.SmallPrimes;
 import cc.redberry.rings.util.ArraysUtil;
-import gnu.trove.list.array.TIntArrayList;
-import gnu.trove.set.hash.TLongHashSet;
+import com.carrotsearch.hppc.IntArrayList;
+import com.carrotsearch.hppc.LongHashSet;
 import org.apache.commons.math3.random.RandomGenerator;
 
 import java.util.*;
@@ -597,7 +597,7 @@ public final class MultivariateFactorization {
         int univariateFactorizations = 0;
         boolean tryZeroFirst = true;
 
-        TLongHashSet evaluationStack = new TLongHashSet();
+        LongHashSet evaluationStack = new LongHashSet();
         RandomGenerator random = cc.redberry.rings.poly.multivar.PrivateRandom.getRandom();
         while (univariateFactorizations < UNIVARIATE_FACTORIZATION_ATTEMPTS) {
             if (evaluationStack.size() == ring.modulus)
@@ -2317,8 +2317,8 @@ public final class MultivariateFactorization {
                 if (bReduced.isConstant())
                     allFactors.set(j, null);
 
-                TIntArrayList aGCDIndexes = a.update(aReduced, gcd);
-                TIntArrayList bGCDIndexes = b.update(bReduced, gcd);
+                IntArrayList aGCDIndexes = a.update(aReduced, gcd);
+                IntArrayList bGCDIndexes = b.update(bReduced, gcd);
 
                 FactorRef<Poly> gcdRef = new FactorRef<>();
                 gcdRef.decompositions.addAll(a.decompositions);
@@ -2365,24 +2365,24 @@ public final class MultivariateFactorization {
 
     private static final class FactorRef<Poly extends IPolynomial<Poly>> {
         final List<PolynomialFactorDecomposition<Poly>> decompositions;
-        final TIntArrayList indexes;
+        final IntArrayList indexes;
 
         FactorRef() {
             this.decompositions = new ArrayList<>();
-            this.indexes = new TIntArrayList();
+            this.indexes = new IntArrayList();
         }
 
         FactorRef(PolynomialFactorDecomposition<Poly> decomposition, int index) {
             this.decompositions = new ArrayList<>();
-            this.indexes = new TIntArrayList();
+            this.indexes = new IntArrayList();
             decompositions.add(decomposition);
             indexes.add(index);
         }
 
         Poly factor() {return decompositions.get(0).get(indexes.get(0));}
 
-        TIntArrayList update(Poly reduced, Poly gcd) {
-            TIntArrayList gcdIndexes = new TIntArrayList(indexes.size());
+        IntArrayList update(Poly reduced, Poly gcd) {
+            IntArrayList gcdIndexes = new IntArrayList(indexes.size());
             // add gcd to all required decompositions
             for (int i = 0; i < decompositions.size(); i++) {
                 PolynomialFactorDecomposition<Poly> decomposition = decompositions.get(i);

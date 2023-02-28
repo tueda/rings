@@ -6,8 +6,8 @@ import cc.redberry.rings.poly.univar.UnivariateDivision;
 import cc.redberry.rings.poly.univar.UnivariatePolynomial;
 import cc.redberry.rings.poly.univar.UnivariatePolynomialZp64;
 import cc.redberry.rings.util.ArraysUtil;
-import gnu.trove.list.array.TIntArrayList;
-import gnu.trove.list.array.TLongArrayList;
+import com.carrotsearch.hppc.IntArrayList;
+import com.carrotsearch.hppc.LongArrayList;
 
 import java.util.ArrayList;
 
@@ -316,7 +316,7 @@ public final class LinearSolver {
         }
 
         // back substitution in case of underdetermined system
-        TIntArrayList nzColumns = new TIntArrayList(), nzRows = new TIntArrayList();
+        IntArrayList nzColumns = new IntArrayList(), nzRows = new IntArrayList();
         //number of zero columns
         int nZeroColumns = 0;
         int iRow = 0;
@@ -766,7 +766,7 @@ public final class LinearSolver {
         }
 
         // back substitution in case of underdetermined system
-        TIntArrayList nzColumns = new TIntArrayList(), nzRows = new TIntArrayList();
+        IntArrayList nzColumns = new IntArrayList(), nzRows = new IntArrayList();
         //number of zero columns
         int nZeroColumns = 0;
         int iRow = 0;
@@ -830,7 +830,7 @@ public final class LinearSolver {
      * @param result where to place the result
      * @return system information (inconsistent, under-determined or consistent)
      */
-    public static SystemInfo solve(IntegersZp64 ring, ArrayList<long[]> lhs, TLongArrayList rhs, long[] result) {
+    public static SystemInfo solve(IntegersZp64 ring, ArrayList<long[]> lhs, LongArrayList rhs, long[] result) {
         return solve(ring, lhs.toArray(new long[lhs.size()][]), rhs.toArray(), result);
     }
 

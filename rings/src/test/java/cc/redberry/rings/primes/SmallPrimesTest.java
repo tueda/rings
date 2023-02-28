@@ -1,6 +1,6 @@
 package cc.redberry.rings.primes;
 
-import gnu.trove.set.hash.TIntHashSet;
+import com.carrotsearch.hppc.IntHashSet;
 import org.apache.commons.math3.random.RandomGenerator;
 import org.apache.commons.math3.random.Well512a;
 import org.junit.Ignore;
@@ -18,8 +18,8 @@ public class SmallPrimesTest {
 
     @Test
     public void test2() throws Exception {
-        assertEquals(SmallPrimes12.length, new TIntHashSet(SmallPrimes12).size());
-        assertEquals(SmallPrimes10.length, new TIntHashSet(SmallPrimes10).size());
+        assertEquals(SmallPrimes12.length, new IntHashSet(SmallPrimes12).size());
+        assertEquals(SmallPrimes10.length, new IntHashSet(SmallPrimes10).size());
     }
 
     @Test

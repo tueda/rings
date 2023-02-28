@@ -10,10 +10,9 @@ import cc.redberry.rings.poly.univar.IUnivariatePolynomial;
 import cc.redberry.rings.poly.univar.UnivariatePolynomial;
 import cc.redberry.rings.poly.univar.UnivariatePolynomialZp64;
 import cc.redberry.rings.util.ArraysUtil;
-import gnu.trove.impl.hash.TIntIntHash;
-import gnu.trove.iterator.TIntIterator;
-import gnu.trove.map.hash.TIntIntHashMap;
-import gnu.trove.set.hash.TIntHashSet;
+import com.carrotsearch.hppc.cursors.IntCursor;
+import com.carrotsearch.hppc.IntIntHashMap;
+import com.carrotsearch.hppc.IntHashSet;
 import org.apache.commons.math3.random.RandomGenerator;
 
 import java.util.*;
@@ -644,9 +643,9 @@ public abstract class AMultivariatePolynomial<Term extends AMonomial<Term>, Poly
      * Returns the array where i-th element is a number of unique degrees of i-th variable
      */
     public final int[] uniqueOccurrences() {
-        TIntHashSet[] degrees = new TIntHashSet[nVariables];
+        IntHashSet[] degrees = new IntHashSet[nVariables];
         for (int i = 0; i < nVariables; i++) {
-            degrees[i] = new TIntHashSet();
+            degrees[i] = new IntHashSet();
         }
         int[] occurrences = new int[nVariables];
         for (Term t : terms) {
@@ -676,7 +675,7 @@ public abstract class AMultivariatePolynomial<Term extends AMonomial<Term>, Poly
      * @return the array of exponents in which {@code variable} occurs in this polynomial
      */
     public final int[] degrees(int variable) {
-        TIntHashSet degrees = new TIntHashSet();
+        IntHashSet degrees = new IntHashSet();
         for (Term db : terms)
             degrees.add(db.exponents[variable]);
         return degrees.toArray();
@@ -716,7 +715,7 @@ public abstract class AMultivariatePolynomial<Term extends AMonomial<Term>, Poly
      * total degree not larger than distinct total degrees presented in this.
      */
     public double sparsity2() {
-        TIntHashSet distinctTotalDegrees = new TIntHashSet();
+        IntHashSet distinctTotalDegrees = new IntHashSet();
         terms.keySet().stream().mapToInt(dv -> dv.totalDegree).forEach(distinctTotalDegrees::add);
         TIntIterator it = distinctTotalDegrees.iterator();
         double nDenseTerms = 0.0;

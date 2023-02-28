@@ -4,7 +4,7 @@ package cc.redberry.rings.poly.multivar;
 import cc.redberry.rings.IntegersZp64;
 import cc.redberry.rings.Ring;
 import cc.redberry.rings.poly.IPolynomialRing;
-import gnu.trove.list.array.TLongArrayList;
+import com.carrotsearch.hppc.LongArrayList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -208,7 +208,7 @@ public final class MultivariateInterpolation {
         /** variable */
         private final int variable;
         /** list of evaluation points */
-        private final TLongArrayList points = new TLongArrayList();
+        private final LongArrayList points = new LongArrayList();
         /** list of values at points */
         private final List<MultivariatePolynomialZp64> values = new ArrayList<>();
         /** mixed radix form of interpolating polynomial */
@@ -324,7 +324,7 @@ public final class MultivariateInterpolation {
          *
          * @return list of evaluation points used in interpolation
          */
-        public TLongArrayList getPoints() {return points;}
+        public LongArrayList getPoints() {return points;}
 
         /**
          * Returns the list of polynomial values at interpolation points

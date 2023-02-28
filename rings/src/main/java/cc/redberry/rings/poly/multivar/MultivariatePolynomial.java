@@ -14,10 +14,10 @@ import cc.redberry.rings.poly.UnivariateRing;
 import cc.redberry.rings.poly.univar.IUnivariatePolynomial;
 import cc.redberry.rings.poly.univar.UnivariatePolynomial;
 import cc.redberry.rings.util.ArraysUtil;
-import gnu.trove.iterator.TLongObjectIterator;
-import gnu.trove.list.array.TIntArrayList;
-import gnu.trove.map.hash.TIntObjectHashMap;
-import gnu.trove.map.hash.TLongObjectHashMap;
+import com.carrotsearch.hppc.cursors.LongObjectCursor;
+import com.carrotsearch.hppc.IntArrayList;
+import com.carrotsearch.hppc.IntObjectHashMap;
+import com.carrotsearch.hppc.LongObjectHashMap;
 import org.apache.commons.math3.random.RandomGenerator;
 
 import java.util.*;
@@ -1074,7 +1074,7 @@ public final class MultivariatePolynomial<E> extends AMultivariatePolynomial<Mon
     public static <E> E evaluateSparseRecursiveForm(AMultivariatePolynomial recForm, int nVariables, E[] values) {
         // compute number of variables
         AMultivariatePolynomial p = recForm;
-        TIntArrayList degrees = new TIntArrayList();
+        IntArrayList degrees = new IntArrayList();
         int n = nVariables - 1;
         while (n > 0) {
             p = (AMultivariatePolynomial) ((MultivariatePolynomial) p).cc();
@@ -1607,8 +1607,8 @@ public final class MultivariatePolynomial<E> extends AMultivariatePolynomial<Mon
         final int nVariables;
         final Comparator<DegreeVector> ordering;
         final UnivariatePolynomial<E> base;
-        final TIntObjectHashMap<UnivariatePolynomial<E>> uCache = new TIntObjectHashMap<>();
-        final TIntObjectHashMap<MultivariatePolynomial<E>> mCache = new TIntObjectHashMap<>();
+        final IntObjectHashMap<UnivariatePolynomial<E>> uCache = new IntObjectHashMap<>();
+        final IntObjectHashMap<MultivariatePolynomial<E>> mCache = new IntObjectHashMap<>();
 
         USubstitution(UnivariatePolynomial<E> base, int variable, int nVariables, Comparator<DegreeVector> ordering) {
             this.nVariables = nVariables;
@@ -1630,7 +1630,7 @@ public final class MultivariatePolynomial<E> extends AMultivariatePolynomial<Mon
 
     static final class MSubstitution<E> implements PrecomputedSubstitution<E> {
         final MultivariatePolynomial<E> base;
-        final TIntObjectHashMap<MultivariatePolynomial<E>> cache = new TIntObjectHashMap<>();
+        final IntObjectHashMap<MultivariatePolynomial<E>> cache = new IntObjectHashMap<>();
 
         MSubstitution(MultivariatePolynomial<E> base) {
             this.base = base;
@@ -1800,8 +1800,8 @@ public final class MultivariatePolynomial<E> extends AMultivariatePolynomial<Mon
     /**
      * Convert to Kronecker's representation
      */
-    private TLongObjectHashMap<E> toKronecker(long[] kroneckerMap) {
-        TLongObjectHashMap<E> result = new TLongObjectHashMap<>(size());
+    private LongObjectHashMap<E> toKronecker(long[] kroneckerMap) {
+        LongObjectHashMap<E> result = new LongObjectHashMap<>(size());
         for (Monomial<E> term : this) {
             long exponent = term.exponents[0];
             for (int i = 1; i < term.exponents.length; i++)
@@ -1812,10 +1812,10 @@ public final class MultivariatePolynomial<E> extends AMultivariatePolynomial<Mon
         return result;
     }
 
-    private static <E> TLongObjectHashMap<CfHolder<E>> multiplySparseUnivariate(Ring<E> ring,
-                                                                                TLongObjectHashMap<E> a,
-                                                                                TLongObjectHashMap<E> b) {
-        TLongObjectHashMap<CfHolder<E>> result = new TLongObjectHashMap<>(a.size() + b.size());
+    private static <E> LongObjectHashMap<CfHolder<E>> multiplySparseUnivariate(Ring<E> ring,
+                                                                                LongObjectHashMap<E> a,
+                                                                                LongObjectHashMap<E> b) {
+        LongObjectHashMap<CfHolder<E>> result = new LongObjectHashMap<>(a.size() + b.size());
         TLongObjectIterator<E> ait = a.iterator();
         while (ait.hasNext()) {
             ait.advance();
@@ -1838,7 +1838,7 @@ public final class MultivariatePolynomial<E> extends AMultivariatePolynomial<Mon
         return result;
     }
 
-    private MultivariatePolynomial<E> fromKronecker(TLongObjectHashMap<CfHolder<E>> p,
+    private MultivariatePolynomial<E> fromKronecker(LongObjectHashMap<CfHolder<E>> p,
                                                     long[] kroneckerMap) {
         terms.clear();
         TLongObjectIterator<CfHolder<E>> it = p.iterator();

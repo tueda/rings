@@ -4,8 +4,8 @@ import cc.redberry.rings.io.IStringifier;
 import cc.redberry.rings.io.Stringifiable;
 import cc.redberry.rings.poly.MachineArithmetic;
 import cc.redberry.rings.util.ArraysUtil;
-import gnu.trove.list.array.TIntArrayList;
-import gnu.trove.map.hash.TObjectIntHashMap;
+import com.carrotsearch.hppc.IntArrayList;
+import com.carrotsearch.hppc.ObjectIntHashMap;
 
 import java.util.*;
 import java.util.function.Function;
@@ -29,9 +29,9 @@ public class FactorDecomposition<E>
     /** factors */
     public final List<E> factors;
     /** exponents */
-    public final TIntArrayList exponents;
+    public final IntArrayList exponents;
 
-    protected FactorDecomposition(Ring<E> ring, E unit, List<E> factors, TIntArrayList exponents) {
+    protected FactorDecomposition(Ring<E> ring, E unit, List<E> factors, IntArrayList exponents) {
         this.ring = ring;
         this.unit = unit;
         this.factors = factors;
@@ -139,7 +139,7 @@ public class FactorDecomposition<E>
         List<E> newFactors = new ArrayList<>();
         for (int i = 0; i < size(); i++)
             newFactors.add(ring.pow(factors.get(i), exponents.get(i)));
-        return new FactorDecomposition<>(ring, unit, newFactors, new TIntArrayList(ArraysUtil.arrayOf(1, size())));
+        return new FactorDecomposition<>(ring, unit, newFactors, new IntArrayList(ArraysUtil.arrayOf(1, size())));
     }
 
     /**
@@ -151,14 +151,14 @@ public class FactorDecomposition<E>
             newFactors.add(ring.copy(unit));
         else
             newFactors.set(0, ring.multiplyMutable(newFactors.get(0), ring.copy(unit)));
-        return new FactorDecomposition<>(ring, ring.getOne(), newFactors, new TIntArrayList(exponents));
+        return new FactorDecomposition<>(ring, ring.getOne(), newFactors, new IntArrayList(exponents));
     }
 
     /**
      * Set all exponents to one
      */
     public FactorDecomposition<E> dropExponents() {
-        return new FactorDecomposition<>(ring, unit, factors, new TIntArrayList(ArraysUtil.arrayOf(1, size())));
+        return new FactorDecomposition<>(ring, unit, factors, new IntArrayList(ArraysUtil.arrayOf(1, size())));
     }
 
     /**
@@ -307,14 +307,14 @@ public class FactorDecomposition<E>
                 ring,
                 ring.copy(unit),
                 factors.stream().map(ring::copy).collect(Collectors.toList()),
-                new TIntArrayList(exponents));
+                new IntArrayList(exponents));
     }
 
     /** Unit factorization */
     public static <E> FactorDecomposition<E> unit(Ring<E> ring, E unit) {
         if (!ring.isUnitOrZero(unit))
             throw new IllegalArgumentException("not a unit");
-        return new FactorDecomposition<>(ring, unit, new ArrayList<>(), new TIntArrayList());
+        return new FactorDecomposition<>(ring, unit, new ArrayList<>(), new IntArrayList());
     }
 
     /** Empty factorization */
@@ -330,7 +330,7 @@ public class FactorDecomposition<E>
      * @param factors   the factors
      * @param exponents the exponents
      */
-    public static <E> FactorDecomposition<E> of(Ring<E> ring, E unit, List<E> factors, TIntArrayList exponents) {
+    public static <E> FactorDecomposition<E> of(Ring<E> ring, E unit, List<E> factors, IntArrayList exponents) {
         if (factors.size() != exponents.size())
             throw new IllegalArgumentException();
         FactorDecomposition<E> r = empty(ring).addUnit(unit);
@@ -356,11 +356,11 @@ public class FactorDecomposition<E>
      * @param factors factors
      */
     public static <E> FactorDecomposition<E> of(Ring<E> ring, Collection<E> factors) {
-        TObjectIntHashMap<E> map = new TObjectIntHashMap<>();
+        ObjectIntHashMap<E> map = new ObjectIntHashMap<>();
         for (E e : factors)
             map.adjustOrPutValue(e, 1, 1);
         List<E> l = new ArrayList<>();
-        TIntArrayList e = new TIntArrayList();
+        IntArrayList e = new IntArrayList();
         map.forEachEntry((a, b) -> {
             l.add(a);
             e.add(b);

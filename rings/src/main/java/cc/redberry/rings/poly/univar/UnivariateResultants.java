@@ -6,7 +6,7 @@ import cc.redberry.rings.poly.*;
 import cc.redberry.rings.poly.multivar.AMonomial;
 import cc.redberry.rings.poly.multivar.AMultivariatePolynomial;
 import cc.redberry.rings.primes.PrimesIterator;
-import gnu.trove.list.array.TLongArrayList;
+import com.carrotsearch.hppc.LongArrayList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -761,13 +761,13 @@ public final class UnivariateResultants {
         }
 
         /** scalar subresultants */
-        private final TLongArrayList subresultants = new TLongArrayList();
+        private final LongArrayList subresultants = new LongArrayList();
 
         synchronized final void computeSubresultants() {
             if (!subresultants.isEmpty())
                 return;
 
-            TLongArrayList subresultants = nonZeroSubresultants();
+            LongArrayList subresultants = nonZeroSubresultants();
             if (swap)
                 for (int i = 0; i < subresultants.size(); ++i)
                     subresultants.set(i, ring.negate(subresultants.get(i)));
@@ -780,8 +780,8 @@ public final class UnivariateResultants {
         }
 
         /** general setting for Fundamental Theorem of Resultant Theory */
-        TLongArrayList nonZeroSubresultants() {
-            TLongArrayList subresultants = new TLongArrayList();
+        LongArrayList nonZeroSubresultants() {
+            LongArrayList subresultants = new LongArrayList();
             // largest subresultant
             long subresultant = ring.powMod(remainders.get(1).lc(), degreeDiff(0));
             subresultants.add(subresultant);
@@ -802,7 +802,7 @@ public final class UnivariateResultants {
         /**
          * Gives a list of scalar subresultant where i-th list element is i-th subresultant.
          */
-        public final TLongArrayList getSubresultants() {
+        public final LongArrayList getSubresultants() {
             if (subresultants.isEmpty())
                 computeSubresultants();
             return subresultants;

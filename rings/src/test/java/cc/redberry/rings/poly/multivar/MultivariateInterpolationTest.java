@@ -3,7 +3,7 @@ package cc.redberry.rings.poly.multivar;
 import cc.redberry.rings.IntegersZp;
 import cc.redberry.rings.Ring;
 import cc.redberry.rings.bigint.BigInteger;
-import gnu.trove.set.hash.TIntHashSet;
+import com.carrotsearch.hppc.IntHashSet;
 import org.apache.commons.math3.random.RandomDataGenerator;
 import org.apache.commons.math3.random.RandomGenerator;
 import org.junit.Test;
@@ -99,7 +99,7 @@ public class MultivariateInterpolationTest extends AMultivariateTest {
             int degree = base.degrees()[var];
 
             MultivariateInterpolation.Interpolation<BigInteger> interpolation = new MultivariateInterpolation.Interpolation<>(var, base);
-            TIntHashSet seen = new TIntHashSet();
+            IntHashSet seen = new IntHashSet();
             for (int i = 0; i <= degree + 2; i++) {
                 int iPoint = rndd.nextInt(0, domain.modulus.intValue() - 1);
                 if (seen.contains(iPoint))

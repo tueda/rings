@@ -17,11 +17,10 @@ import cc.redberry.rings.poly.univar.UnivariatePolynomialArithmetic;
 import cc.redberry.rings.primes.PrimesIterator;
 import cc.redberry.rings.util.ArraysUtil;
 import cc.redberry.rings.util.ListWrapper;
-import gnu.trove.impl.Constants;
-import gnu.trove.list.array.TIntArrayList;
-import gnu.trove.list.array.TLongArrayList;
-import gnu.trove.map.hash.TIntIntHashMap;
-import gnu.trove.set.hash.TIntHashSet;
+import com.carrotsearch.hppc.IntArrayList;
+import com.carrotsearch.hppc.LongArrayList;
+import com.carrotsearch.hppc.IntIntHashMap;
+import com.carrotsearch.hppc.IntHashSet;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -486,7 +485,7 @@ public final class GroebnerBases {
         }
 
         // first indices of new critical pairs to add
-        TIntArrayList pairsToAdd = new TIntArrayList();
+        IntArrayList pairsToAdd = new IntArrayList();
         // find new critical pairs that should be definitely added
         filter:
         for (int iIndex = 0; iIndex < basis.size(); ++iIndex) {
@@ -1795,7 +1794,7 @@ public final class GroebnerBases {
         }
 
         // find non pivoting columns
-        TIntArrayList nonPivotColumns = new TIntArrayList();
+        IntArrayList nonPivotColumns = new IntArrayList();
         for (iColumn = 0; iColumn < nRows + nonPivotColumns.size() && iColumn < nColumns; ++iColumn)
             if (columnsLeadTermsFilling[iColumn] == 0)
                 nonPivotColumns.add(iColumn);
@@ -1839,7 +1838,7 @@ public final class GroebnerBases {
         }
 
         // choose pivoting rows, so that B matrix is maximally sparse (rows with minimal bFillIns)
-        TIntArrayList pivots = new TIntArrayList();
+        IntArrayList pivots = new IntArrayList();
         for (iColumn = 0; iColumn < nRows; ++iColumn) {
             int minFillIn = Integer.MAX_VALUE;
             int pivot = -1;
@@ -1888,12 +1887,12 @@ public final class GroebnerBases {
         for (iRow = 0; iRow < nRows; ++iRow) {
             ArrayBasedPoly<MonomialZp64> hPoly = hPolynomials.get(iRow).hPoly;
 
-            TIntArrayList
-                    acSparseCols = new TIntArrayList(),
-                    bdSparseCols = new TIntArrayList();
-            TLongArrayList
-                    acSparseVals = new TLongArrayList(),
-                    bdSparseVals = new TLongArrayList();
+            IntArrayList
+                    acSparseCols = new IntArrayList(),
+                    bdSparseCols = new IntArrayList();
+            LongArrayList
+                    acSparseVals = new LongArrayList(),
+                    bdSparseVals = new LongArrayList();
             long[] bdDenseVals = new long[bDenseColumns.length];
             for (int i = 0; i < hPoly.size(); i++) {
                 iColumn = mapping[iRow][i];
@@ -2094,8 +2093,8 @@ public final class GroebnerBases {
             for (int i = 0; i < densePositions.length; i++)
                 denseValues[i] = denseArray[densePositions[i]];
 
-            TIntArrayList sparsePositions = new TIntArrayList();
-            TLongArrayList sparseValues = new TLongArrayList();
+            IntArrayList sparsePositions = new IntArrayList();
+            LongArrayList sparseValues = new LongArrayList();
             for (int i = 0; i < denseArray.length; ++i) {
                 if (denseArray[i] == 0)
                     continue;
@@ -2134,8 +2133,8 @@ public final class GroebnerBases {
             int firstSparse = ArraysUtil.binarySearch1(sparsePositions, iColumn);
 
             // resulting non-zero columns
-            TIntArrayList resCols = new TIntArrayList(sparsePositions.length + pivCols.length);
-            TLongArrayList resVals = new TLongArrayList(sparsePositions.length + pivCols.length);
+            IntArrayList resCols = new IntArrayList(sparsePositions.length + pivCols.length);
+            LongArrayList resVals = new LongArrayList(sparsePositions.length + pivCols.length);
 
             resCols.add(sparsePositions, 0, firstSparse);
             resVals.add(sparseValues, 0, firstSparse);
@@ -2280,13 +2279,13 @@ public final class GroebnerBases {
 
         SparseRowMatrixZp64 toRowMatrix(int[] densePositions) {
             SparseRowMatrixZp64 rowMatrix = new SparseRowMatrixZp64(ring, nRows, nColumns, densePositions);
-            TIntArrayList[] sparseColumns = new TIntArrayList[nRows];
-            TLongArrayList[] sparseValues = new TLongArrayList[nRows];
+            IntArrayList[] sparseColumns = new IntArrayList[nRows];
+            LongArrayList[] sparseValues = new LongArrayList[nRows];
             long[][] denseValues = new long[nRows][densePositions.length];
 
             for (int iRow = 0; iRow < nRows; ++iRow) {
-                sparseColumns[iRow] = new TIntArrayList();
-                sparseValues[iRow] = new TLongArrayList();
+                sparseColumns[iRow] = new IntArrayList();
+                sparseValues[iRow] = new LongArrayList();
             }
 
             for (int iColumn = 0; iColumn < nColumns; ++iColumn) {
@@ -2477,7 +2476,7 @@ public final class GroebnerBases {
         }
 
         // find non pivoting columns
-        TIntArrayList nonPivotColumns = new TIntArrayList();
+        IntArrayList nonPivotColumns = new IntArrayList();
         for (iColumn = 0; iColumn < nRows + nonPivotColumns.size() && iColumn < nColumns; ++iColumn)
             if (columnsLeadTermsFilling[iColumn] == 0)
                 nonPivotColumns.add(iColumn);
@@ -2522,7 +2521,7 @@ public final class GroebnerBases {
 
         // choose pivoting rows, so that B matrix is maximally sparse (rows with minimal bFillIns)
         // and lead terms of pivoting polys are units (if possible)
-        TIntArrayList pivots = new TIntArrayList();
+        IntArrayList pivots = new IntArrayList();
         for (iColumn = 0; iColumn < nRows; ++iColumn) {
             int minFillIn = Integer.MAX_VALUE;
             int pivot = -1;
@@ -2579,9 +2578,9 @@ public final class GroebnerBases {
         for (iRow = 0; iRow < nRows; ++iRow) {
             ArrayBasedPoly<Monomial<E>> hPoly = hPolynomials.get(iRow).hPoly;
 
-            TIntArrayList
-                    acSparseCols = new TIntArrayList(),
-                    bdSparseCols = new TIntArrayList();
+            IntArrayList
+                    acSparseCols = new IntArrayList(),
+                    bdSparseCols = new IntArrayList();
             ArrayList<E>
                     acSparseVals = new ArrayList<>(),
                     bdSparseVals = new ArrayList<>();
@@ -2867,7 +2866,7 @@ public final class GroebnerBases {
             for (int i = 0; i < densePositions.length; i++)
                 denseValues[i] = denseArray[densePositions[i]];
 
-            TIntArrayList sparsePositions = new TIntArrayList();
+            IntArrayList sparsePositions = new IntArrayList();
             ArrayList<E> sparseValues = new ArrayList<>();
             for (int i = 0; i < denseArray.length; ++i) {
                 if (ring.isZero(denseArray[i]))
@@ -2923,7 +2922,7 @@ public final class GroebnerBases {
             int firstSparse = ArraysUtil.binarySearch1(sparsePositions, iColumn);
 
             // resulting non-zero columns
-            TIntArrayList resCols = new TIntArrayList(sparsePositions.length + pivCols.length);
+            IntArrayList resCols = new IntArrayList(sparsePositions.length + pivCols.length);
             ArrayList<E> resVals = new ArrayList<>(sparsePositions.length + pivCols.length);
 
             resCols.add(sparsePositions, 0, firstSparse);
@@ -2970,7 +2969,7 @@ public final class GroebnerBases {
                 }
 
             sparsePositions = resCols.toArray();
-            assert resCols.size() == new TIntArrayList(resCols).size();
+            assert resCols.size() == new IntArrayList(resCols).size();
             sparseValues = resVals.toArray(ring.createArray(resVals.size()));
             assert isSorted(sparsePositions) : Arrays.toString(sparsePositions);
         }
@@ -3119,12 +3118,12 @@ public final class GroebnerBases {
 
         SparseRowMatrix<E> toRowMatrix(int[] densePositions) {
             SparseRowMatrix<E> rowMatrix = new SparseRowMatrix<>(ring, nRows, nColumns, densePositions);
-            TIntArrayList[] sparseColumns = new TIntArrayList[nRows];
+            IntArrayList[] sparseColumns = new IntArrayList[nRows];
             ArrayList<E>[] sparseValues = new ArrayList[nRows];
             E[][] denseValues = ring.createArray2d(nRows, densePositions.length);
 
             for (int iRow = 0; iRow < nRows; ++iRow) {
-                sparseColumns[iRow] = new TIntArrayList();
+                sparseColumns[iRow] = new IntArrayList();
                 sparseValues[iRow] = new ArrayList<>();
             }
 
@@ -3885,7 +3884,7 @@ public final class GroebnerBases {
 
         List<Equation<Term, Poly>> nonLinearEquations = new ArrayList<>();
         EquationSolver<Term, Poly> solver = createSolver(factory);
-        TIntHashSet solvedVariables = new TIntHashSet();
+        IntHashSet solvedVariables = new IntHashSet();
         for (EqSupplier<Term, Poly> eqSupplier : source) {
             if (solvedVariables.size() == nUnknowns)
                 // system is solved
@@ -3973,7 +3972,7 @@ public final class GroebnerBases {
 
     static int[] usedVars(AMultivariatePolynomial equation) {
         int[] degrees = equation.degrees();
-        TIntArrayList usedVars = new TIntArrayList();
+        IntArrayList usedVars = new IntArrayList();
         for (int i = 0; i < degrees.length; ++i)
             if (degrees[i] > 0)
                 usedVars.add(i);
@@ -3990,7 +3989,7 @@ public final class GroebnerBases {
     /** get rid of auxiliary variables used for unknowns that were solved */
     static <Term extends AMonomial<Term>, Poly extends AMultivariatePolynomial<Term, Poly>>
     void dropSolvedVariables(
-            TIntHashSet solvedVariables,
+            IntHashSet solvedVariables,
             List<MultivariatePolynomial<Poly>> initialIdeal,
             MultivariatePolynomial<Poly>[] gbCandidate,
             List<Equation<Term, Poly>> nonLinearEquations,
@@ -4136,7 +4135,7 @@ public final class GroebnerBases {
         /** variables that present in this equation */
         final int[] usedVars;
         /** variable -> variable_in_reduced_equation */
-        final TIntIntHashMap mapping;
+        final IntIntHashMap mapping;
         /** compact form of equation (with unused variables dropped) */
         final Poly reducedEquation;
         /** whether this equation is linear */
@@ -4144,7 +4143,7 @@ public final class GroebnerBases {
 
         Equation(Poly equation) {
             int[] degrees = equation.degrees();
-            TIntArrayList usedVars = new TIntArrayList();
+            IntArrayList usedVars = new IntArrayList();
             for (int i = 0; i < degrees.length; ++i)
                 if (degrees[i] > 0)
                     usedVars.add(i);
@@ -4153,13 +4152,13 @@ public final class GroebnerBases {
             assert Arrays.stream(this.usedVars).allMatch(i -> i >= 0);
             assert isSorted(this.usedVars);
             this.reducedEquation = equation.dropSelectVariables(this.usedVars);
-            this.mapping = new TIntIntHashMap(Constants.DEFAULT_CAPACITY, Constants.DEFAULT_LOAD_FACTOR, -1, -1);
+            this.mapping = new IntIntHashMap(Constants.DEFAULT_CAPACITY, Constants.DEFAULT_LOAD_FACTOR, -1, -1);
             for (int i = 0; i < this.usedVars.length; ++i)
                 mapping.put(this.usedVars[i], i);
             this.isLinear = isLinear(equation);
         }
 
-        Equation(int[] usedVars, TIntIntHashMap mapping, Poly reducedEquation) {
+        Equation(int[] usedVars, IntIntHashMap mapping, Poly reducedEquation) {
             this.usedVars = usedVars;
             assert reducedEquation.isZero() || this.usedVars.length > 0;
             assert Arrays.stream(this.usedVars).allMatch(i -> i >= 0);
@@ -4216,7 +4215,7 @@ public final class GroebnerBases {
         /** list of linear equations */
         final List<Equation<Term, Poly>> equations = new ArrayList<>();
         /** variables solved so far */
-        final TIntArrayList solvedVariables = new TIntArrayList();
+        final IntArrayList solvedVariables = new IntArrayList();
 
         EquationSolver() {}
 
@@ -4327,9 +4326,9 @@ public final class GroebnerBases {
         @Override
         Equation<Monomial<E>, MultivariatePolynomial<E>> simplify(Equation<Monomial<E>, MultivariatePolynomial<E>> eq) {
             // eliminated variables
-            TIntArrayList eliminated = new TIntArrayList();
+            IntArrayList eliminated = new IntArrayList();
             // eliminated variables in eq.reducedEquation
-            TIntHashSet rEliminated = new TIntHashSet();
+            IntHashSet rEliminated = new IntHashSet();
             // reduced equation
             MultivariatePolynomial<E> rPoly = eq.reducedEquation;
 
@@ -4350,7 +4349,7 @@ public final class GroebnerBases {
             eliminated.sort();
             int[] eliminatedArray = eliminated.toArray();
             int[] usedVars = ArraysUtil.intSetDifference(eq.usedVars, eliminatedArray);
-            TIntIntHashMap mapping = new TIntIntHashMap();
+            IntIntHashMap mapping = new IntIntHashMap();
             for (int i = 0; i < usedVars.length; ++i)
                 mapping.put(usedVars[i], i);
 
@@ -4360,7 +4359,7 @@ public final class GroebnerBases {
         @Override
         MultivariatePolynomial<E> simplify(MultivariatePolynomial<E> poly) {
             int[] degs = poly.degrees();
-            TIntArrayList subsVariables = new TIntArrayList();
+            IntArrayList subsVariables = new IntArrayList();
             List<E> subsValues = new ArrayList<>();
             for (int i = 0; i < solvedVariables.size(); ++i)
                 if (degs[solvedVariables.get(i)] > 0) {
@@ -4380,7 +4379,7 @@ public final class GroebnerBases {
             for (int i = 0; i < equations.size(); ++i) {
                 // some base equation
                 Equation<Monomial<E>, MultivariatePolynomial<E>> baseEq = equations.get(i);
-                TIntHashSet baseVars = new TIntHashSet(baseEq.usedVars);
+                IntHashSet baseVars = new IntHashSet(baseEq.usedVars);
 
                 // search equations compatible with base equation
                 List<Equation<Monomial<E>, MultivariatePolynomial<E>>> block = new ArrayList<>(Collections.singletonList(baseEq));
@@ -4416,7 +4415,7 @@ public final class GroebnerBases {
         SystemInfo solve(List<Equation<Monomial<E>, MultivariatePolynomial<E>>> equations, int[] usedVariables) {
             int nUsedVariables = usedVariables.length;
 
-            TIntIntHashMap mapping = new TIntIntHashMap();
+            IntIntHashMap mapping = new IntIntHashMap();
             int[] linalgVariables = new int[nUsedVariables];
             int c = 0;
             for (int i : usedVariables) {

@@ -17,7 +17,7 @@ import cc.redberry.rings.util.ArraysUtil;
 import cc.redberry.rings.util.RandomDataGenerator;
 import cc.redberry.rings.util.RandomUtil;
 import cc.redberry.rings.util.TimeUnits;
-import gnu.trove.list.array.TIntArrayList;
+import com.carrotsearch.hppc.IntArrayList;
 import org.apache.commons.math3.random.RandomGenerator;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.junit.Assert;
@@ -1560,7 +1560,7 @@ public class MultivariateGCDTest extends AMultivariateTest {
     }
 
     private static MultivariatePolynomialZp64 setZeroes(MultivariatePolynomialZp64 poly, BitSet zeroes) {
-        TIntArrayList vars = new TIntArrayList();
+        IntArrayList vars = new IntArrayList();
         for (int i = 0; i < zeroes.size(); i++)
             if (zeroes.get(i))
                 vars.add(i);

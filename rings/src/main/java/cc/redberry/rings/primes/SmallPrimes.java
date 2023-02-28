@@ -1,6 +1,6 @@
 package cc.redberry.rings.primes;
 
-import gnu.trove.list.array.TIntArrayList;
+import com.carrotsearch.hppc.IntArrayList;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -131,7 +131,7 @@ public final class SmallPrimes {
      * @param factors the list where to add the factors.
      * @return the part of n which remains to be factored, it is either a prime or a semi-prime
      */
-    public static int smallTrialDivision(int n, final TIntArrayList factors) {
+    public static int smallTrialDivision(int n, final IntArrayList factors) {
         for (int p : SmallPrimes12) {
             while (0 == n % p) {
                 n = n / p;
@@ -150,7 +150,7 @@ public final class SmallPrimes {
      * @param factors   the list where to add the factors.
      * @return n or 1 if factorization is completed.
      */
-    public static int boundedTrialDivision(int n, int maxFactor, TIntArrayList factors) {
+    public static int boundedTrialDivision(int n, int maxFactor, IntArrayList factors) {
         int f = PRIMES12_LAST + 2;
         // no check is done about n >= f
         while (f <= maxFactor) {
@@ -180,7 +180,7 @@ public final class SmallPrimes {
      * @return the list of prime factors of n
      */
     private static int[] trialDivision(int n) {
-        final TIntArrayList factors = new TIntArrayList(32);
+        final IntArrayList factors = new IntArrayList(32);
         n = smallTrialDivision(n, factors);
         if (1 == n)
             return factors.toArray();

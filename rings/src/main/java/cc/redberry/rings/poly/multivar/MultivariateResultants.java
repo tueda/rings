@@ -13,9 +13,9 @@ import cc.redberry.rings.poly.UnivariateRing;
 import cc.redberry.rings.poly.univar.*;
 import cc.redberry.rings.primes.PrimesIterator;
 import cc.redberry.rings.util.ArraysUtil;
-import gnu.trove.iterator.TIntObjectIterator;
-import gnu.trove.map.hash.TIntObjectHashMap;
-import gnu.trove.set.hash.TLongHashSet;
+import com.carrotsearch.hppc.cursors.IntObjectCursor;
+import com.carrotsearch.hppc.IntObjectHashMap;
+import com.carrotsearch.hppc.LongHashSet;
 import org.apache.commons.math3.random.RandomGenerator;
 
 import java.util.Arrays;
@@ -1052,7 +1052,7 @@ public final class MultivariateResultants {
         //dense interpolation
         MultivariateInterpolation.InterpolationZp64 interpolation = null;
         //store points that were already used in interpolation
-        TLongHashSet evaluationStack = new TLongHashSet();
+        LongHashSet evaluationStack = new LongHashSet();
         RandomGenerator rnd = PrivateRandom.getRandom();
         while (true) {
             if (evaluationStack.size() == ring.modulus)
@@ -1217,7 +1217,7 @@ public final class MultivariateResultants {
         //sparse interpolation
         SparseInterpolationZp64 sparseInterpolation;
         //store points that were already used in interpolation
-        TLongHashSet globalEvaluationStack = new TLongHashSet();
+        LongHashSet globalEvaluationStack = new LongHashSet();
         RandomGenerator rnd = PrivateRandom.getRandom();
         main:
         while (true) {
@@ -1259,7 +1259,7 @@ public final class MultivariateResultants {
             denseInterpolation = new MultivariateInterpolation.InterpolationZp64(variable, seedRandomPoint, baseResultant);
             sparseInterpolation = createInterpolation(variable, a, b, baseResultant, degreeBounds[variable], rnd);
             //local evaluation stack for points that are calculated via sparse interpolation (but not resultant evaluation) -> always same skeleton
-            TLongHashSet localEvaluationStack = new TLongHashSet(globalEvaluationStack);
+            LongHashSet localEvaluationStack = new LongHashSet(globalEvaluationStack);
             while (true) {
                 if (localEvaluationStack.size() == ring.modulus)
                     // all elements of the ring are tried
@@ -1402,7 +1402,7 @@ public final class MultivariateResultants {
         skeleton = skeleton.clone().setAllCoefficientsToUnit();
 
         Set<DegreeVector> globalSkeleton = skeleton.getSkeleton();
-        TIntObjectHashMap<MultivariatePolynomialZp64> univarSkeleton = getSkeleton(skeleton);
+        IntObjectHashMap<MultivariatePolynomialZp64> univarSkeleton = getSkeleton(skeleton);
         int[] sparseUnivarDegrees = univarSkeleton.keys();
 
         IntegersZp64 ring = factory.ring;
@@ -1481,7 +1481,7 @@ public final class MultivariateResultants {
         /** global skeleton of the result */
         final Set<DegreeVector> globalSkeleton;
         /** skeleton of each of the coefficients of polynomial viewed as Zp[x_1,...,x_N][x_0] */
-        final TIntObjectHashMap<MultivariatePolynomialZp64> univarSkeleton;
+        final IntObjectHashMap<MultivariatePolynomialZp64> univarSkeleton;
         /** univariate degrees of {@code univarSkeleton} with respect to x_0 */
         final int[] sparseUnivarDegrees;
         /**
@@ -1511,7 +1511,7 @@ public final class MultivariateResultants {
                                 UnivariatePolynomial<MultivariatePolynomialZp64> a,
                                 UnivariatePolynomial<MultivariatePolynomialZp64> b,
                                 Set<DegreeVector> globalSkeleton,
-                                TIntObjectHashMap<MultivariatePolynomialZp64> univarSkeleton,
+                                IntObjectHashMap<MultivariatePolynomialZp64> univarSkeleton,
                                 int[] sparseUnivarDegrees,
                                 int[] evaluationVariables,
                                 long[] evaluationPoint,
@@ -1643,7 +1643,7 @@ public final class MultivariateResultants {
         skeleton = skeleton.clone().setAllCoefficientsToUnit();
 
         Set<DegreeVector> globalSkeleton = skeleton.getSkeleton();
-        TIntObjectHashMap<MultivariatePolynomial<E>> univarSkeleton = getSkeleton(skeleton);
+        IntObjectHashMap<MultivariatePolynomial<E>> univarSkeleton = getSkeleton(skeleton);
         int[] sparseUnivarDegrees = univarSkeleton.keys();
 
         Ring<E> ring = factory.ring;
@@ -1723,7 +1723,7 @@ public final class MultivariateResultants {
         /** global skeleton of the result */
         final Set<DegreeVector> globalSkeleton;
         /** skeleton of each of the coefficients of polynomial viewed as Zp[x_1,...,x_N][x_0] */
-        final TIntObjectHashMap<MultivariatePolynomial<E>> univarSkeleton;
+        final IntObjectHashMap<MultivariatePolynomial<E>> univarSkeleton;
         /** univariate degrees of {@code univarSkeleton} with respect to x_0 */
         final int[] sparseUnivarDegrees;
         /**
@@ -1754,7 +1754,7 @@ public final class MultivariateResultants {
                              UnivariatePolynomial<MultivariatePolynomial<E>> a,
                              UnivariatePolynomial<MultivariatePolynomial<E>> b,
                              Set<DegreeVector> globalSkeleton,
-                             TIntObjectHashMap<MultivariatePolynomial<E>> univarSkeleton,
+                             IntObjectHashMap<MultivariatePolynomial<E>> univarSkeleton,
                              int[] sparseUnivarDegrees,
                              int[] evaluationVariables,
                              E[] evaluationPoint,

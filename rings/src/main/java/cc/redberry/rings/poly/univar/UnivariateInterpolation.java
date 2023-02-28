@@ -2,7 +2,7 @@ package cc.redberry.rings.poly.univar;
 
 import cc.redberry.rings.IntegersZp64;
 import cc.redberry.rings.Ring;
-import gnu.trove.list.array.TLongArrayList;
+import com.carrotsearch.hppc.LongArrayList;
 
 import java.util.ArrayList;
 
@@ -134,11 +134,11 @@ public final class UnivariateInterpolation {
     public static final class InterpolationZp64 {
         private final IntegersZp64 ring;
         /** list of evaluation points */
-        private final TLongArrayList points = new TLongArrayList();
+        private final LongArrayList points = new LongArrayList();
         /** list of values at points */
-        private final TLongArrayList values = new TLongArrayList();
+        private final LongArrayList values = new LongArrayList();
         /** mixed radix form of interpolating polynomial */
-        private final TLongArrayList mixedRadix = new TLongArrayList();
+        private final LongArrayList mixedRadix = new LongArrayList();
         /** total modulus (x_i - points[0])*(x_i - points[1])*... */
         private final UnivariatePolynomialZp64 lins;
         /** resulting interpolating polynomial */
@@ -212,14 +212,14 @@ public final class UnivariateInterpolation {
          *
          * @return list of evaluation points used in interpolation
          */
-        public TLongArrayList getPoints() {return points;}
+        public LongArrayList getPoints() {return points;}
 
         /**
          * Returns the list of polynomial values at interpolation points
          *
          * @return the list of polynomial values at interpolation points
          */
-        public TLongArrayList getValues() {return values;}
+        public LongArrayList getValues() {return values;}
 
         /**
          * Returns the number of interpolation points used
