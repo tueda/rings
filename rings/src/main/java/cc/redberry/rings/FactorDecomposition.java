@@ -6,6 +6,7 @@ import cc.redberry.rings.poly.MachineArithmetic;
 import cc.redberry.rings.util.ArraysUtil;
 import com.carrotsearch.hppc.IntArrayList;
 import com.carrotsearch.hppc.ObjectIntHashMap;
+import com.carrotsearch.hppc.procedures.ObjectIntProcedure;
 
 import java.util.*;
 import java.util.function.Function;
@@ -361,10 +362,9 @@ public class FactorDecomposition<E>
             map.putOrAdd(e, 1, 1);
         List<E> l = new ArrayList<>();
         IntArrayList e = new IntArrayList();
-        map.forEachEntry((a, b) -> {
+        map.forEach((ObjectIntProcedure<E>)(a, b) -> {
             l.add(a);
             e.add(b);
-            return true;
         });
         return of(ring, ring.getOne(), l, e);
     }

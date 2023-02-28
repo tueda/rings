@@ -4,6 +4,7 @@ import cc.redberry.rings.FactorDecomposition;
 import cc.redberry.rings.util.ArraysUtil;
 import com.carrotsearch.hppc.IntArrayList;
 import com.carrotsearch.hppc.ObjectIntHashMap;
+import com.carrotsearch.hppc.procedures.ObjectIntProcedure;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -240,10 +241,9 @@ public final class PolynomialFactorDecomposition<Poly extends IPolynomial<Poly>>
             map.putOrAdd(e, 1, 1);
         List<Poly> l = new ArrayList<>();
         IntArrayList e = new IntArrayList();
-        map.forEachEntry((a, b) -> {
+        map.forEach((ObjectIntProcedure<Poly>)(a, b) -> {
             l.add(a);
             e.add(b);
-            return true;
         });
         return of(factors.iterator().next().createOne(), l, e);
     }
