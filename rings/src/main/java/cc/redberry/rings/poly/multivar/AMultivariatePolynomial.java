@@ -717,10 +717,9 @@ public abstract class AMultivariatePolynomial<Term extends AMonomial<Term>, Poly
     public double sparsity2() {
         IntHashSet distinctTotalDegrees = new IntHashSet();
         terms.keySet().stream().mapToInt(dv -> dv.totalDegree).forEach(distinctTotalDegrees::add);
-        TIntIterator it = distinctTotalDegrees.iterator();
         double nDenseTerms = 0.0;
-        while (it.hasNext()) {
-            int deg = it.next();
+        for (IntCursor c : distinctTotalDegrees) {
+            int deg = c.value;
             double d = BigIntegerUtil.binomial(deg + nVariables - 1, deg).doubleValue();
             nDenseTerms += d;
             if (d == Double.MAX_VALUE)

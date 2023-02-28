@@ -1816,16 +1816,11 @@ public final class MultivariatePolynomial<E> extends AMultivariatePolynomial<Mon
                                                                                 LongObjectHashMap<E> a,
                                                                                 LongObjectHashMap<E> b) {
         LongObjectHashMap<CfHolder<E>> result = new LongObjectHashMap<>(a.size() + b.size());
-        TLongObjectIterator<E> ait = a.iterator();
-        while (ait.hasNext()) {
-            ait.advance();
-            TLongObjectIterator<E> bit = b.iterator();
-            while (bit.hasNext()) {
-                bit.advance();
-
-                long deg = ait.key() + bit.key();
-                E av = ait.value();
-                E bv = bit.value();
+        for (LongObjectCursor<E> ac : a) {
+            for (LongObjectCursor<E> bc : b) {
+                long deg = ac.key + bc.key;
+                E av = ac.value;
+                E bv = bc.value;
                 E val = ring.multiply(av, bv);
                 CfHolder<E> r = result.get(deg);
                 if (r != null) {
@@ -1841,19 +1836,17 @@ public final class MultivariatePolynomial<E> extends AMultivariatePolynomial<Mon
     private MultivariatePolynomial<E> fromKronecker(LongObjectHashMap<CfHolder<E>> p,
                                                     long[] kroneckerMap) {
         terms.clear();
-        TLongObjectIterator<CfHolder<E>> it = p.iterator();
-        while (it.hasNext()) {
-            it.advance();
-            if (ring.isZero(it.value().coefficient))
+        for (LongObjectCursor<CfHolder<E>> c : p) {
+            if (ring.isZero(c.value.coefficient))
                 continue;
-            long exponent = it.key();
+            long exponent = c.key;
             int[] exponents = new int[nVariables];
             for (int i = 0; i < nVariables; i++) {
                 long div = exponent / kroneckerMap[nVariables - i - 1];
                 exponent = exponent - (div * kroneckerMap[nVariables - i - 1]);
                 exponents[nVariables - i - 1] = MachineArithmetic.safeToInt(div);
             }
-            terms.add(new Monomial<>(exponents, it.value().coefficient));
+            terms.add(new Monomial<>(exponents, c.value.coefficient));
         }
         release();
         return this;

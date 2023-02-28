@@ -3721,13 +3721,12 @@ public final class MultivariateGCD {
         }
 
         int requiredNumberOfEvaluations = -1, monicScalingExponent = -1;
-        for (TIntObjectIterator<MultivariatePolynomial<E>> it = univarSkeleton.iterator(); it.hasNext(); ) {
-            it.advance();
-            MultivariatePolynomial<E> v = it.value();
+        for (IntObjectCursor<MultivariatePolynomial<E>> c : univarSkeleton) {
+            MultivariatePolynomial<E> v = c.value;
             if (v.size() > requiredNumberOfEvaluations)
                 requiredNumberOfEvaluations = v.size();
             if (v.size() == 1)
-                monicScalingExponent = it.key();
+                monicScalingExponent = c.key;
         }
 
         if (!ALWAYS_LINZIP) {
@@ -4915,13 +4914,12 @@ public final class MultivariateGCD {
         }
 
         int requiredNumberOfEvaluations = -1, monicScalingExponent = -1;
-        for (TIntObjectIterator<MultivariatePolynomialZp64> it = univarSkeleton.iterator(); it.hasNext(); ) {
-            it.advance();
-            MultivariatePolynomialZp64 v = it.value();
+        for (IntObjectCursor<MultivariatePolynomialZp64> c : univarSkeleton) {
+            MultivariatePolynomialZp64 v = c.value;
             if (v.size() > requiredNumberOfEvaluations)
                 requiredNumberOfEvaluations = v.size();
             if (v.size() == 1)
-                monicScalingExponent = it.key();
+                monicScalingExponent = c.key;
         }
 
         if (!ALWAYS_LINZIP) {

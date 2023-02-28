@@ -1681,19 +1681,17 @@ public final class MultivariatePolynomialZp64 extends AMultivariatePolynomial<Mo
     private MultivariatePolynomialZp64 fromKronecker(LongObjectHashMap<CfHolder> p,
                                                      long[] kroneckerMap) {
         terms.clear();
-        TLongObjectIterator<CfHolder> it = p.iterator();
-        while (it.hasNext()) {
-            it.advance();
-            if (it.value().coefficient == 0)
+        for (LongObjectCursor<CfHolder> c : p) {
+            if (c.value.coefficient == 0)
                 continue;
-            long exponent = it.key();
+            long exponent = c.key;
             int[] exponents = new int[nVariables];
             for (int i = 0; i < nVariables; i++) {
                 long div = exponent / kroneckerMap[nVariables - i - 1];
                 exponent = exponent - (div * kroneckerMap[nVariables - i - 1]);
                 exponents[nVariables - i - 1] = MachineArithmetic.safeToInt(div);
             }
-            terms.add(new MonomialZp64(exponents, it.value().coefficient));
+            terms.add(new MonomialZp64(exponents, c.value.coefficient));
         }
         release();
         return this;

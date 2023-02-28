@@ -7,6 +7,7 @@ import cc.redberry.rings.primes.SmallPrimes;
 import cc.redberry.rings.util.RandomDataGenerator;
 import com.carrotsearch.hppc.IntObjectMap;
 import com.carrotsearch.hppc.IntObjectHashMap;
+import com.carrotsearch.hppc.cursors.IntCursor;
 import org.apache.commons.math3.random.RandomGenerator;
 import org.junit.Assert;
 import org.junit.Test;
@@ -131,7 +132,8 @@ public class IrreduciblePolynomialsTest extends AUnivariateTest {
             if (exponent <= 64)
                 Assert.assertEquals(msg, createMonomialMod(Rings.Z.pow(BigInteger.valueOf(poly.modulus()), exponent), poly, invMod), actual);
 
-            for (int ci : cache.keys()) {
+            for (IntCursor c : cache.keys()) {
+                int ci = c.value;
                 msg = msg + "\nexponent: " + ci;
                 Assert.assertEquals(msg, composition(xq.clone(), ci, poly, invMod), cache.get(ci));
                 if (ci <= 64)
