@@ -1806,7 +1806,7 @@ public final class MultivariatePolynomial<E> extends AMultivariatePolynomial<Mon
             long exponent = term.exponents[0];
             for (int i = 1; i < term.exponents.length; i++)
                 exponent += term.exponents[i] * kroneckerMap[i];
-            assert !result.contains(exponent);
+            assert !result.containsKey(exponent);
             result.put(exponent, term.coefficient);
         }
         return result;

@@ -139,7 +139,7 @@ public class FactorDecomposition<E>
         List<E> newFactors = new ArrayList<>();
         for (int i = 0; i < size(); i++)
             newFactors.add(ring.pow(factors.get(i), exponents.get(i)));
-        return new FactorDecomposition<>(ring, unit, newFactors, new IntArrayList(ArraysUtil.arrayOf(1, size())));
+        return new FactorDecomposition<>(ring, unit, newFactors, IntArrayList.from(ArraysUtil.arrayOf(1, size())));
     }
 
     /**
@@ -158,7 +158,7 @@ public class FactorDecomposition<E>
      * Set all exponents to one
      */
     public FactorDecomposition<E> dropExponents() {
-        return new FactorDecomposition<>(ring, unit, factors, new IntArrayList(ArraysUtil.arrayOf(1, size())));
+        return new FactorDecomposition<>(ring, unit, factors, IntArrayList.from(ArraysUtil.arrayOf(1, size())));
     }
 
     /**
@@ -173,7 +173,7 @@ public class FactorDecomposition<E>
      * Remove specified factor
      */
     public FactorDecomposition<E> dropFactor(int i) {
-        exponents.removeAt(i);
+        exponents.remove(i);
         factors.remove(i);
         return this;
     }
@@ -236,7 +236,7 @@ public class FactorDecomposition<E>
         factors.clear();
         exponents.clear();
         factors.addAll(Arrays.stream(wr).map(w -> w.el).collect(Collectors.toList()));
-        exponents.addAll(ex);
+        exponents.add(ex);
         return this;
     }
 
@@ -358,7 +358,7 @@ public class FactorDecomposition<E>
     public static <E> FactorDecomposition<E> of(Ring<E> ring, Collection<E> factors) {
         ObjectIntHashMap<E> map = new ObjectIntHashMap<>();
         for (E e : factors)
-            map.adjustOrPutValue(e, 1, 1);
+            map.putOrAdd(e, 1, 1);
         List<E> l = new ArrayList<>();
         IntArrayList e = new IntArrayList();
         map.forEachEntry((a, b) -> {

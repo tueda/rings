@@ -1403,7 +1403,7 @@ public final class MultivariateResultants {
 
         Set<DegreeVector> globalSkeleton = skeleton.getSkeleton();
         IntObjectHashMap<MultivariatePolynomialZp64> univarSkeleton = getSkeleton(skeleton);
-        int[] sparseUnivarDegrees = univarSkeleton.keys();
+        int[] sparseUnivarDegrees = univarSkeleton.keys().toArray();
 
         IntegersZp64 ring = factory.ring;
 
@@ -1644,7 +1644,7 @@ public final class MultivariateResultants {
 
         Set<DegreeVector> globalSkeleton = skeleton.getSkeleton();
         IntObjectHashMap<MultivariatePolynomial<E>> univarSkeleton = getSkeleton(skeleton);
-        int[] sparseUnivarDegrees = univarSkeleton.keys();
+        int[] sparseUnivarDegrees = univarSkeleton.keys().toArray();
 
         Ring<E> ring = factory.ring;
 

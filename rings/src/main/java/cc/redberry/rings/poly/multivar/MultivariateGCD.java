@@ -3690,7 +3690,7 @@ public final class MultivariateGCD {
         boolean monic = a.coefficientOf(0, a.degree(0)).isConstant() && b.coefficientOf(0, a.degree(0)).isConstant();
         Set<DegreeVector> globalSkeleton = skeleton.getSkeleton();
         IntObjectHashMap<MultivariatePolynomial<E>> univarSkeleton = getSkeleton(skeleton);
-        int[] sparseUnivarDegrees = univarSkeleton.keys();
+        int[] sparseUnivarDegrees = univarSkeleton.keys().toArray();
 
         Ring<E> ring = a.ring;
 
@@ -4884,7 +4884,7 @@ public final class MultivariateGCD {
 
         Set<DegreeVector> globalSkeleton = skeleton.getSkeleton();
         IntObjectHashMap<MultivariatePolynomialZp64> univarSkeleton = getSkeleton(skeleton);
-        int[] sparseUnivarDegrees = univarSkeleton.keys();
+        int[] sparseUnivarDegrees = univarSkeleton.keys().toArray();
 
         IntegersZp64 ring = a.ring;
 

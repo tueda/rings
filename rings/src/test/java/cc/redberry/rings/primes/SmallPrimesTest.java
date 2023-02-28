@@ -18,8 +18,8 @@ public class SmallPrimesTest {
 
     @Test
     public void test2() throws Exception {
-        assertEquals(SmallPrimes12.length, new IntHashSet(SmallPrimes12).size());
-        assertEquals(SmallPrimes10.length, new IntHashSet(SmallPrimes10).size());
+        assertEquals(SmallPrimes12.length, IntHashSet.from(SmallPrimes12).size());
+        assertEquals(SmallPrimes10.length, IntHashSet.from(SmallPrimes10).size());
     }
 
     @Test

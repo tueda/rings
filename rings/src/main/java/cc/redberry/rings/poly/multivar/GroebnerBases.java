@@ -522,7 +522,7 @@ public final class GroebnerBases {
         // now rule out disjoint elements
         for (int i = pairsToAdd.size() - 1; i >= 0; --i)
             if (!shareVariablesQ(basis.get(pairsToAdd.get(i)).lt(), newLeadTerm))
-                pairsToAdd.removeAt(i);
+                pairsToAdd.remove(i);
 
         // ruling out redundant Buchberger triplets from the old set of critical pairs
         Iterator<TreeSet<SyzygyPair<Term, Poly>>> it = sPairs.allSets().iterator();
@@ -4379,7 +4379,7 @@ public final class GroebnerBases {
             for (int i = 0; i < equations.size(); ++i) {
                 // some base equation
                 Equation<Monomial<E>, MultivariatePolynomial<E>> baseEq = equations.get(i);
-                IntHashSet baseVars = new IntHashSet(baseEq.usedVars);
+                IntHashSet baseVars = IntHashSet.from(baseEq.usedVars);
 
                 // search equations compatible with base equation
                 List<Equation<Monomial<E>, MultivariatePolynomial<E>>> block = new ArrayList<>(Collections.singletonList(baseEq));
@@ -4442,7 +4442,7 @@ public final class GroebnerBases {
             E[] linalgSolution = ring.createArray(nUsedVariables);
             SystemInfo solve = LinearSolver.solve(ring, lhs, rhs, linalgSolution);
             if (solve == SystemInfo.Consistent) {
-                this.solvedVariables.addAll(linalgVariables);
+                this.solvedVariables.add(linalgVariables);
                 this.solutions.addAll(Arrays.asList(linalgSolution));
             }
             return solve;

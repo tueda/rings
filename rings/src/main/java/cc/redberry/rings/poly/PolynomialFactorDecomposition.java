@@ -237,7 +237,7 @@ public final class PolynomialFactorDecomposition<Poly extends IPolynomial<Poly>>
     public static <Poly extends IPolynomial<Poly>> PolynomialFactorDecomposition<Poly> of(Collection<Poly> factors) {
         ObjectIntHashMap<Poly> map = new ObjectIntHashMap<>();
         for (Poly e : factors)
-            map.adjustOrPutValue(e, 1, 1);
+            map.putOrAdd(e, 1, 1);
         List<Poly> l = new ArrayList<>();
         IntArrayList e = new IntArrayList();
         map.forEachEntry((a, b) -> {

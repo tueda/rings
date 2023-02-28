@@ -2346,7 +2346,7 @@ public final class MultivariateFactorization {
 
             if (factor.isOne()) {
                 decomposition.factors.remove(i);
-                decomposition.exponents.removeAt(i);
+                decomposition.exponents.remove(i);
                 continue;
             }
 
@@ -2356,7 +2356,7 @@ public final class MultivariateFactorization {
                 if (decomposition.get(j).equals(factor)) {
                     decomposition.exponents.set(i, decomposition.exponents.get(j) + decomposition.exponents.get(i));
                     decomposition.factors.remove(j);
-                    decomposition.exponents.removeAt(j);
+                    decomposition.exponents.remove(j);
                     continue main;
                 }
             }
